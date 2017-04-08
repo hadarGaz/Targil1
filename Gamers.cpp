@@ -5,32 +5,38 @@ char Gamers::defualtName = 'A';
 void Gamers::setSoldiers(Cell board[Size][Size], int gamerNum)
 {
 	_gamerNum = gamerNum;
-	char soldierNum;
+	int soldierNum;
 	if (gamerNum == 1) {
 		soldierNum = 1;
-		//name = "A";
 	}
 	else {
 		soldierNum = 7;
-		//name = "B";
 	}
 	int x=0, y=0, found = 0;
 	for (soldier& sol : soldiers)
 	{
-		while (found)
+		while (!found)
 		{
-			y = rand() % 13 + 1;
+			y = (rand() % 13) + 1;
 			if (gamerNum == 2)
 				x = rand() % 5 + 9;
 			else
-				x = rand() % 5 + 1;
-			if ((board[x][y]).validToSet())
+				x = (rand() % 5) + 1;
+			if ((board[x][y]).isCellEmpty())
 				found = 1;
 		}
 		//to ask how to do here cont
+		sol.setCondition(soldierNum);
 		sol.set(x, y, soldierNum++);
-		(board[x][y]).update(gamerNum, soldierNum);
+		(board[x][y]).update(soldierNum);
+		found = 0;
 	}
+}
+
+void Gamers::drowSoldiers()
+{
+	for (soldier& sol : soldiers)
+		sol.draw();
 }
 void Gamers::setkeys(const char* keys)
 {
@@ -42,18 +48,18 @@ void Gamers::setkeys(const char* keys)
 void Gamers::notifyKeyHit(char ch)
 {
 	int i = 0, found = 0;
-	if ((ch >= '0' && ch <= '3') || (ch >= '7' && ch <= '9'))
-		//active the right soldier(stop to curr, move to new)
-	
-	
-		if (tolower(ch) == _keys[UP])
-			setDirection(Direction::UP);
-		else if (tolower(ch) == _keys[DOWN])
-			setDirection(Direction::DOWN);
-		else if (tolower(ch) == _keys[LEFT])
-			setDirection(Direction::LEFT);
-		else if (tolower(ch) == _keys[RIGHT])
-			setDirection(Direction::RIGHT);
+	if ((ch >= '1' && ch <= '3') && _gamerNum == 1)
+		currSoldier = atoi(&ch);
+	else if((ch >= '7' && ch <= '9') && _gamerNum == 2)
+		currSoldier = atoi(&ch);
+	else if (tolower(ch) == _keys[UP])
+		setDirection(Direction::UP);
+	else if (tolower(ch) == _keys[DOWN])
+		setDirection(Direction::DOWN);
+	else if (tolower(ch) == _keys[LEFT])
+		setDirection(Direction::LEFT);
+	else if (tolower(ch) == _keys[RIGHT])
+		setDirection(Direction::RIGHT);
 
 
 }
@@ -65,8 +71,7 @@ void Gamers::setName()
 
 void Gamers::setDirection(Direction d)
 {
-	//need to change the soldier according to curr soldier
-	soldiers[0].setDirection(d);
+	soldiers[currSoldier-1].setDirection(d);
 }
 
 void Gamers::printGamerName()
@@ -88,4 +93,10 @@ int Gamers::getScore()
 void Gamers::putScore(int _score)
 {
 	score = _score;
+}
+
+void Gamers::move(Cell board[Size][Size])
+{
+	if(currSoldier != -1)
+		soldiers[currSoldier-1].move(board);
 }

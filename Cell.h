@@ -9,8 +9,11 @@ class Cell {
 	int GamerB=0;
 public:
 
-	bool validToSet();
-	void update(int gamerNum, int soldierNum);
+	bool isCellEmpty();
+	void update(int soldierNum);
 	void setCellType(int num);
 	int returnedCellType();
+	int returndGamer(int& numOfGamer);
+
+
 };

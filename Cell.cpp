@@ -1,6 +1,6 @@
 #include "Cell.h"
 
-bool Cell::validToSet()
+bool Cell::isCellEmpty()
 {
 	if (this->cellType == emptyType && this->GamerA == noGamerA && this->GamerB == noGamerB)
 		return true;
@@ -8,9 +8,9 @@ bool Cell::validToSet()
 		return false;
 }
 
-void Cell::update(int gamerNum, int soldierNum)
+void Cell::update(int soldierNum)
 {
-	if (gamerNum == 1)
+	if (soldierNum >= 1 && soldierNum <= 3)
 		GamerA = soldierNum;
 	else
 		GamerB = soldierNum;
@@ -25,4 +25,17 @@ int Cell::returnedCellType()
 {
 	return this->cellType;
 
+}
+
+int Cell::returndGamer(int& numOfGamer)
+{
+	if (this->GamerA == 0) {
+		return this->GamerB;
+		numOfGamer = 2;
+	}
+	else
+	{
+		return this->GamerA;
+		numOfGamer = 1;
+	}
 }

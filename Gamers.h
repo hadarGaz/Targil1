@@ -3,6 +3,7 @@
 #include "Cell.h"
 #include <conio.h>
 #include <string>
+#include "Utils.h"
 using namespace std;
 class GameManeger;
 
@@ -14,12 +15,10 @@ class Gamers {
 	string name;
 	int score = 0;
 	int _gamerNum;
-	
-
-public:
 	static char defualtName;
+	int currSoldier =-1;
+public:
 	Gamers() { 
-		//defualtName = 'A';
 		name = defualtName++;
 	}
 	void setName();
@@ -31,5 +30,7 @@ public:
 	void printGamerScore();
 	int getScore();
 	void putScore(int _score);
+	void drowSoldiers();
+	void move(Cell board[Size][Size]);
 
 };

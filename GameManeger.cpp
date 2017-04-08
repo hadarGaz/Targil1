@@ -1,6 +1,5 @@
 
 #include "GameManeger.h"
-#include "Cell.h"
 
 using namespace std;
 
@@ -29,10 +28,12 @@ void GameManeger::menu()
 			startGame();
 			break;
 		case '3':
+			clearScreen();
 			swapScore();
 			break;
 		case '4':
 			resetScore();
+			cout << "Score was reset";
 			break;
 		case '9':
 			getout = true;
@@ -48,22 +49,32 @@ void GameManeger::menu()
 void GameManeger::startGame()
 {
 	int gamerNum = 1;
-	resetScore();
 	gamers[0].setSoldiers(board, gamerNum++);
 	gamers[1].setSoldiers(board, gamerNum);
-	printBoard();
 	run();
 }
 void GameManeger::run()
 {
 	char ch =0;
+	bool flag = 0;
+	clearScreen();
+	printBoard();
+	gamers[0].drowSoldiers();
+	gamers[1].drowSoldiers();
 	while (ch != ESC)
 	{
-		//gamers[0].move();
-		//בדיקה אם הגיע לדגל
-		//gamers[1].move();
-		//בדיקה אם הגיע לדגל
-
+		if (flag == 0)
+		{
+			gamers[0].move(board);
+			//בדיקה אם הגיע לדגל
+			flag = 1;
+		}
+		else
+		{
+			gamers[1].move(board);
+			//בדיקה אם הגיע לדגל
+			flag = 0;
+		}
 		Sleep(80);
 		if (_kbhit())
 		{
@@ -72,6 +83,7 @@ void GameManeger::run()
 			gamers[1].notifyKeyHit(ch);
 		}
 	}
+	clearScreen();
 	//stop the game
 	seconderyMenu();
 }
@@ -123,7 +135,7 @@ void GameManeger::printBoard()
 
 
 
-void GameManeger::setBoard(Cell board[Size][Size])
+void GameManeger::setBoard()
 {
 	board[7][1].setCellType(fr);
 	board[8][1].setCellType(fr);
@@ -211,6 +223,7 @@ void GameManeger::seconderyMenu()
 			startGame();
 			break;
 		case '8':
+			clearScreen();
 			menu();
 			break;
 		case '9':
